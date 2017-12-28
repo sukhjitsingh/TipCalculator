@@ -25,13 +25,14 @@ class ViewController: UIViewController {
         
         let defaults = UserDefaults.standard
         tipControl.selectedSegmentIndex = defaults.integer(forKey: "DefaultTipValue")
+        billTextField.becomeFirstResponder()
+
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        billTextField.becomeFirstResponder()
     }
 
     override func didReceiveMemoryWarning() {
@@ -51,8 +52,19 @@ class ViewController: UIViewController {
         self.tip = bill * tipPercentages[tipControl.selectedSegmentIndex]
         self.total = bill + tip
         
-        tipLabel.text = String(format: "$%.2f", tip)
-        totalLabel.text = String(format: "$%.2f", total)
+        
+        let formatter = NumberFormatter()
+        formatter.locale = Locale.current
+        
+        formatter.numberStyle = .currency
+        
+        if let formattedTipAmount = formatter.string(from: tip as NSNumber) {
+            tipLabel.text = formattedTipAmount
+        }
+        
+        if let formattedTotalAmount = formatter.string(from: total as NSNumber) {
+            totalLabel.text = formattedTotalAmount
+        }
     }
 }
 
